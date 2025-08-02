@@ -14,8 +14,43 @@ import time
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+from urllib.parse import parse_qs, urlparse
 
 import requests
+
+
+class URLParser:
+    """Handles parsing of CarGurus URLs to extract parameters."""
+    
+    @staticmethod
+    def parse_cargurus_url(url: str) -> Tuple[str, str]:
+        """Parse CarGurus URL to extract model path and entity ID."""
+        try:
+            # Remove shell escape characters that terminals often add when pasting URLs
+            cleaned_url = url.replace('\\?', '?').replace('\\=', '=').replace('\\&', '&')
+            parsed_url = urlparse(cleaned_url)
+            
+            # Extract model path from URL path
+            # Example: /research/price-trends/Toyota-Corolla-d295 -> Toyota-Corolla-d295
+            path_parts = parsed_url.path.split('/')
+            if len(path_parts) < 3 or 'price-trends' not in path_parts:
+                raise ValueError("Invalid CarGurus URL: Must be a price-trends URL")
+            
+            model_path = path_parts[-1]  # Last part is the model path
+            
+            # Extract entity ID from query parameters
+            query_params = parse_qs(parsed_url.query)
+            entity_ids = query_params.get('entityIds', [])
+            
+            if not entity_ids:
+                raise ValueError("Invalid CarGurus URL: Missing entityIds parameter")
+            
+            entity_id = entity_ids[0]  # Take the first entity ID
+            
+            return model_path, entity_id
+            
+        except Exception as e:
+            raise ValueError(f"Error parsing CarGurus URL: {str(e)}")
 
 
 class InputValidator:
@@ -367,8 +402,10 @@ def main():
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(description="Extract vehicle price data from CarGurus for Monarch Money import")
 
-    parser.add_argument("--entity-id", required=True, help="CarGurus entity ID (e.g., 'c32015')")
-    parser.add_argument("--model-path", required=True, help="URL path segment (e.g., 'Honda-Civic-Hatchbook-d2441')")
+    # URL or individual parameters
+    parser.add_argument("--url", help="Full CarGurus price-trends URL (alternative to --entity-id and --model-path)")
+    parser.add_argument("--entity-id", help="CarGurus entity ID (e.g., 'c32015')")
+    parser.add_argument("--model-path", help="URL path segment (e.g., 'Honda-Civic-Hatchbook-d2441')")
     parser.add_argument("--start-date", help="Start date in YYYY-MM-DD format (defaults to earliest possible date if not provided)")
     parser.add_argument("--end-date", help="End date in YYYY-MM-DD format (defaults to yesterday if not provided)")
     parser.add_argument(
@@ -379,10 +416,26 @@ def main():
     args = parser.parse_args()
 
     try:
+        # Validate that either URL or both entity-id and model-path are provided
+        if args.url:
+            if args.entity_id or args.model_path:
+                raise ValueError("Error: Cannot specify both --url and individual --entity-id/--model-path parameters")
+            
+            print("🔗 Parsing CarGurus URL...")
+            model_path, entity_id = URLParser.parse_cargurus_url(args.url)
+            print(f"   └── Extracted model-path: {model_path}")
+            print(f"   └── Extracted entity-id: {entity_id}")
+        else:
+            if not args.entity_id or not args.model_path:
+                raise ValueError("Error: Must provide either --url OR both --entity-id and --model-path")
+            
+            entity_id = args.entity_id
+            model_path = args.model_path
+
         scraper = CarGurusScraper()
         filename = scraper.scrape(
-            entity_id=args.entity_id,
-            model_path=args.model_path,
+            entity_id=entity_id,
+            model_path=model_path,
             start_date_str=args.start_date,
             end_date_str=args.end_date,  # Can be None now
             account_name=args.account_name,

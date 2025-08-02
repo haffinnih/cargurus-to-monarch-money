@@ -30,7 +30,13 @@ This project uses [uv](https://docs.astral.sh/uv/) for dependency management. Ma
 ### Basic Command
 
 ```bash
-# With specific start and end dates
+# Using URL (easiest method - just copy from your browser!)
+uv run python cargurus_scraper.py \
+  --url "https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchback-d2441?entityIds=c32015&startDate=1740805200000&endDate=1754193599999" \
+  --account-name "2022 Honda Civic EX-L" \
+  --session-cookie "ABC123XYZ456"
+
+# Or with individual parameters and specific dates
 uv run python cargurus_scraper.py \
   --entity-id "c32015" \
   --model-path "Honda-Civic-Hatchback-d2441" \
@@ -39,18 +45,11 @@ uv run python cargurus_scraper.py \
   --account-name "2022 Honda Civic EX-L" \
   --session-cookie "ABC123XYZ456"
 
-# Using defaults for both dates (full year of data)
+# Using URL with custom date range
 uv run python cargurus_scraper.py \
-  --entity-id "c32015" \
-  --model-path "Honda-Civic-Hatchback-d2441" \
-  --account-name "2022 Honda Civic EX-L" \
-  --session-cookie "ABC123XYZ456"
-
-# Mix and match: custom start date, default end date
-uv run python cargurus_scraper.py \
-  --entity-id "c32015" \
-  --model-path "Honda-Civic-Hatchback-d2441" \
+  --url "https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchback-d2441?entityIds=c32015" \
   --start-date "2024-01-01" \
+  --end-date "2024-06-30" \
   --account-name "2022 Honda Civic EX-L" \
   --session-cookie "ABC123XYZ456"
 ```
@@ -59,8 +58,9 @@ uv run python cargurus_scraper.py \
 
 | Parameter          | Description                                                        | Example                       |
 | ------------------ | ------------------------------------------------------------------ | ----------------------------- |
-| `--entity-id`      | CarGurus vehicle entity ID                                         | `c32015`                      |
-| `--model-path`     | URL path segment from CarGurus                                     | `Honda-Civic-Hatchback-d2441` |
+| `--url`            | Full CarGurus price-trends URL (alternative to entity-id/model-path) | See examples above            |
+| `--entity-id`      | CarGurus vehicle entity ID (required if not using --url)          | `c32015`                      |
+| `--model-path`     | URL path segment from CarGurus (required if not using --url)      | `Honda-Civic-Hatchback-d2441` |
 | `--start-date`     | Start date in YYYY-MM-DD format (optional, defaults to 1 year ago) | `2025-01-01`                  |
 | `--end-date`       | End date in YYYY-MM-DD format (optional, defaults to yesterday)    | `2025-12-31`                  |
 | `--account-name`   | Vehicle name for CSV output                                        | `2022 Honda Civic EX-L`       |
@@ -68,15 +68,26 @@ uv run python cargurus_scraper.py \
 
 ### Getting Required Parameters
 
-#### 1. Finding Entity ID and Model Path
+#### Method 1: Using URL (Recommended)
 
 1. Go to [CarGurus Price Trends](https://www.cargurus.com/research/price-trends)
-2. Drill down to get to your desired make/model/year
-3. Uncheck all of the charts except the one you want to fetch
-4. The URL will look like: `https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchback-d2441?entityIds=c32015&startDate=1740805200000&endDate=1754107199999`
-5. Note the model path `Honda-Civic-Hatchback-d2441` and entity id `c32015`
+2. Navigate to your desired make/model/year
+3. Uncheck all charts except the one you want to fetch
+4. Copy the entire URL from your browser - it will look like:
+   ```
+   https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchback-d2441?entityIds=c32015&startDate=1740805200000&endDate=1754107199999
+   ```
+5. Use this URL directly with the `--url` parameter
 
-#### 2. Getting Session Cookie
+#### Method 2: Manual Parameter Extraction
+
+If you prefer to extract the parameters manually:
+1. From the URL above, note:
+   - Model path: `Honda-Civic-Hatchback-d2441` (from the URL path)
+   - Entity ID: `c32015` (from the `entityIds` parameter)
+2. Use these with `--entity-id` and `--model-path` parameters
+
+#### Getting Session Cookie
 
 1. Open browser developer tools (F12)
 2. Go to Application/Storage tab → Cookies → cargurus.com
@@ -135,14 +146,11 @@ The script provides clear error messages for common issues:
 
 ## Examples
 
-### Toyota Corolla
+### Toyota Corolla (using URL method)
 
 ```bash
 uv run python cargurus_scraper.py \
-  --entity-id "c26003" \
-  --model-path "Toyota-Corolla-d295" \
-  --start-date "2025-06-01" \
-  --end-date "2025-08-31" \
+  --url "https://www.cargurus.com/research/price-trends/Toyota-Corolla-d295?entityIds=c26003" \
   --account-name "2017 Toyota Corolla" \
   --session-cookie "your_session_cookie_here"
 ```
