@@ -30,16 +30,29 @@ class InputValidator:
             raise ValueError(f"Error: Date must be in YYYY-MM-DD format, got: {date_str}")
 
     @staticmethod
-    def validate_date_range(start_date: datetime, end_date: datetime) -> None:
-        """Validate date range constraints."""
+    def validate_date_range(start_date: datetime, end_date: datetime) -> datetime:
+        """Validate date range constraints and offer earliest possible date if needed."""
         now = datetime.now()
         one_year_ago = now - timedelta(days=365)
 
         if start_date < one_year_ago:
-            raise ValueError("Error: Start date cannot be more than 1 year ago")
+            earliest_date = one_year_ago.strftime('%Y-%m-%d')
+            provided_date = start_date.strftime('%Y-%m-%d')
+            
+            print(f"⚠️  Start date {provided_date} is more than 1 year ago.")
+            print(f"📅 The earliest possible date is: {earliest_date}")
+            
+            response = input("Would you like to use the earliest possible date instead? (y/n): ").lower().strip()
+            if response in ['y', 'yes']:
+                print(f"✅ Using {earliest_date} as start date")
+                return one_year_ago
+            else:
+                raise ValueError("Error: Start date cannot be more than 1 year ago")
 
         if start_date >= end_date:
             raise ValueError("Error: Start date must be before end date")
+        
+        return start_date
 
     @staticmethod
     def validate_required_params(**kwargs) -> None:
@@ -258,7 +271,7 @@ class CarGurusScraper:
 
         start_date = self.validator.validate_date_format(start_date_str)
         end_date = self.validator.validate_date_format(end_date_str)
-        self.validator.validate_date_range(start_date, end_date)
+        start_date = self.validator.validate_date_range(start_date, end_date)
         print("✅ Input validation complete")
 
         # Initialize API client
