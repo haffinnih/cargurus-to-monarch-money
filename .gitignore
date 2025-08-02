@@ -51,8 +51,8 @@ uv.lock
 ehthumbs.db
 Thumbs.db
 
-# Generated CSV files
-*.csv
+# Output folder with generated files
+output/
 
 # Logs
 *.log

@@ -69,7 +69,7 @@ uv run python cargurus_scraper.py \
 
 ## Output
 
-The script generates a CSV file with the following format:
+The script generates CSV files in an `output/` directory with the following format:
 
 ```csv
 Date,Balance,Account
@@ -78,15 +78,17 @@ Date,Balance,Account
 2024-01-03,24979.12,2022 Honda Civic EX-L
 ```
 
-**File naming:** `{account_name_sanitized}_{start_date}_{end_date}.csv`
+**File location:** `output/{account_name_sanitized}_{start_date}_{end_date}.csv`
 
-Example: `2022_Honda_Civic_EX-L_2024-01-01_2024-06-30.csv`
+Example: `output/2022_Honda_Civic_EX-L_2024-01-01_2024-06-30.csv`
+
+The `output/` directory is automatically created if it doesn't exist and is ignored by git to prevent committing your personal vehicle data.
 
 ## Import to Monarch Money
 
 1. Log into Monarch Money
 2. Go to Settings → Data Import
-3. Upload the generated CSV file
+3. Upload the generated CSV file from the `output/` directory
 4. Map the columns:
    - Date → Date
    - Balance → Balance/Value

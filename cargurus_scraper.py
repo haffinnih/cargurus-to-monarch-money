@@ -12,6 +12,7 @@ import re
 import sys
 import time
 from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Dict, List, Tuple
 
 import requests
@@ -202,10 +203,15 @@ class CSVExporter:
     @staticmethod
     def generate_csv(price_data: List[Tuple[str, float]], account_name: str, start_date: str, end_date: str) -> str:
         """Generate CSV file with Monarch Money format."""
+        # Create output directory if it doesn't exist
+        output_dir = Path("output")
+        output_dir.mkdir(exist_ok=True)
+        
         sanitized_name = CSVExporter.sanitize_filename(account_name)
         filename = f"{sanitized_name}_{start_date}_{end_date}.csv"
+        filepath = output_dir / filename
 
-        with open(filename, "w", newline="", encoding="utf-8") as csvfile:
+        with open(filepath, "w", newline="", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile)
 
             # Write header
@@ -215,7 +221,7 @@ class CSVExporter:
             for date_str, price in price_data:
                 writer.writerow([date_str, f"{price:.2f}", account_name])
 
-        return filename
+        return str(filepath)
 
 
 class CarGurusScraper:
