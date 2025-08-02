@@ -132,7 +132,6 @@ class TestInputValidator:
             "entity_id": "c32015",
             "model_path": "Honda-Civic-d2441",
             "account_name": "2022 Honda Civic",
-            "session_cookie": "ABC123",
         }
 
         # Should not raise any exception
@@ -140,7 +139,7 @@ class TestInputValidator:
 
     def test_validate_required_params_missing_entity_id(self):
         """Test validation with missing entity_id."""
-        params = {"model_path": "Honda-Civic-d2441", "account_name": "2022 Honda Civic", "session_cookie": "ABC123"}
+        params = {"model_path": "Honda-Civic-d2441", "account_name": "2022 Honda Civic"}
 
         with pytest.raises(ValueError, match="Missing required parameter: entity_id"):
             InputValidator.validate_required_params(**params)
@@ -151,7 +150,6 @@ class TestInputValidator:
             "entity_id": "",
             "model_path": "Honda-Civic-d2441",
             "account_name": "2022 Honda Civic",
-            "session_cookie": "ABC123",
         }
 
         with pytest.raises(ValueError, match="Missing required parameter: entity_id"):
@@ -163,7 +161,6 @@ class TestInputValidator:
             "entity_id": "c32015",
             "model_path": None,
             "account_name": "2022 Honda Civic",
-            "session_cookie": "ABC123",
         }
 
         with pytest.raises(ValueError, match="Missing required parameter: model_path"):

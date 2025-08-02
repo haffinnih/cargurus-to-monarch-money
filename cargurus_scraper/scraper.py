@@ -27,7 +27,6 @@ class CarGurusScraper:
         start_date_str: Optional[str],
         end_date_str: Optional[str],
         account_name: str,
-        session_cookie: str,
     ) -> str:
         """Main scraping method."""
 
@@ -36,7 +35,6 @@ class CarGurusScraper:
             entity_id=entity_id,
             model_path=model_path,
             account_name=account_name,
-            session_cookie=session_cookie,
         )
 
         if start_date_str:
@@ -56,7 +54,7 @@ class CarGurusScraper:
         start_date, end_date = self.validator.validate_date_range(start_date, end_date)
         print("✅ Input validation complete")
 
-        self.api_client = CarGurusAPIClient(session_cookie)
+        self.api_client = CarGurusAPIClient()
 
         chunks = self.date_processor.generate_monthly_chunks(start_date, end_date)
         print(f"📅 Fetching data in {len(chunks)} monthly chunks...")

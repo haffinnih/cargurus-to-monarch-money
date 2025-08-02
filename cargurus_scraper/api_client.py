@@ -11,13 +11,11 @@ from .processors import DateProcessor
 class CarGurusAPIClient:
     """Handles API requests to CarGurus."""
 
-    def __init__(self, session_cookie: str):
-        self.session_cookie = session_cookie
+    def __init__(self):
         self.base_url = "https://www.cargurus.com/research/price-trends"
         self.session = requests.Session()
         self.session.headers.update(
             {
-                "Cookie": f"JSESSIONID={session_cookie}",
                 "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
             }
         )

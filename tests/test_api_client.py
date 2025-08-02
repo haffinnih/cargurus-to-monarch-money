@@ -14,8 +14,7 @@ class TestCarGurusAPIClient:
 
     def setup_method(self):
         """Set up test fixtures."""
-        self.session_cookie = "test_session_123"
-        self.client = CarGurusAPIClient(self.session_cookie)
+        self.client = CarGurusAPIClient()
         self.model_path = "Honda-Civic-d2441"
         self.entity_id = "c32015"
         self.start_date = datetime(2024, 1, 1)
@@ -23,15 +22,11 @@ class TestCarGurusAPIClient:
 
     def test_init_sets_headers(self):
         """Test that initialization sets correct headers."""
-        assert self.client.session_cookie == self.session_cookie
         assert self.client.base_url == "https://www.cargurus.com/research/price-trends"
 
-        # Check that session headers are set correctly
-        cookie_header = self.client.session.headers.get("Cookie")
-        assert cookie_header is not None
-        assert isinstance(cookie_header, str)
-        assert f"JSESSIONID={self.session_cookie}" in cookie_header
+        # Check that session headers are set correctly (no cookie required)
         assert "User-Agent" in self.client.session.headers
+        assert "Cookie" not in self.client.session.headers
 
     @patch("requests.Session.get")
     def test_fetch_price_data_success(self, mock_get):
@@ -147,18 +142,14 @@ class TestCarGurusAPIClient:
         expected_end = int(self.end_date.timestamp() * 1000)
         assert params["endDate"] == expected_end
 
-    def test_different_session_cookies(self):
-        """Test that different session cookies are handled correctly."""
-        cookie1 = "session_123"
-        cookie2 = "session_456"
+    def test_multiple_clients(self):
+        """Test that multiple clients can be created independently."""
+        client1 = CarGurusAPIClient()
+        client2 = CarGurusAPIClient()
 
-        client1 = CarGurusAPIClient(cookie1)
-        client2 = CarGurusAPIClient(cookie2)
-
-        cookie1_header = client1.session.headers["Cookie"]
-        cookie2_header = client2.session.headers["Cookie"]
-        assert isinstance(cookie1_header, str)
-        assert isinstance(cookie2_header, str)
-        assert f"JSESSIONID={cookie1}" in cookie1_header
-        assert f"JSESSIONID={cookie2}" in cookie2_header
-        assert cookie1_header != cookie2_header
+        # Both clients should have the same base configuration
+        assert client1.base_url == client2.base_url
+        assert client1.session.headers == client2.session.headers
+        # But they should be separate instances
+        assert client1 is not client2
+        assert client1.session is not client2.session

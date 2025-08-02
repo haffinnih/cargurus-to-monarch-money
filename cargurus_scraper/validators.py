@@ -58,7 +58,7 @@ class InputValidator:
     @staticmethod
     def validate_required_params(**kwargs) -> None:
         """Validate all required parameters are provided."""
-        required = ["entity_id", "model_path", "account_name", "session_cookie"]
+        required = ["entity_id", "model_path", "account_name"]
         for param in required:
             if not kwargs.get(param):
                 raise ValueError(f"Error: Missing required parameter: {param}")

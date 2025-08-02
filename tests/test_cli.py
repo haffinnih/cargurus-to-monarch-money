@@ -18,8 +18,6 @@ class TestCLI:
             "https://www.cargurus.com/research/price-trends/Honda-Civic-d2441?entityIds=c32015",
             "--account-name",
             "2022 Honda Civic",
-            "--session-cookie",
-            "test_cookie",
         ]
 
         with patch("sys.argv", test_args):
@@ -46,7 +44,6 @@ class TestCLI:
                         start_date_str=None,
                         end_date_str=None,
                         account_name="2022 Honda Civic",
-                        session_cookie="test_cookie",
                     )
 
     def test_main_with_individual_params_success(self):
@@ -59,8 +56,6 @@ class TestCLI:
             "Honda-Civic-d2441",
             "--account-name",
             "2022 Honda Civic",
-            "--session-cookie",
-            "test_cookie",
         ]
 
         with patch("sys.argv", test_args):
@@ -78,7 +73,6 @@ class TestCLI:
                     start_date_str=None,
                     end_date_str=None,
                     account_name="2022 Honda Civic",
-                    session_cookie="test_cookie",
                 )
 
     def test_main_with_dates(self):
@@ -95,8 +89,6 @@ class TestCLI:
             "2024-06-30",
             "--account-name",
             "2022 Honda Civic",
-            "--session-cookie",
-            "test_cookie",
         ]
 
         with patch("sys.argv", test_args):
@@ -114,8 +106,72 @@ class TestCLI:
                     start_date_str="2024-01-01",
                     end_date_str="2024-06-30",
                     account_name="2022 Honda Civic",
-                    session_cookie="test_cookie",
                 )
+
+    def test_main_url_with_cli_date_priority(self):
+        """Test that CLI dates take priority over URL dates."""
+        test_args = [
+            "cargurus-scraper",
+            "--url",
+            "https://www.cargurus.com/research/price-trends/Honda-Civic-d2441?entityIds=c32015&startDate=1640995200000&endDate=1672531199000",
+            "--start-date",
+            "2024-01-01",  # CLI date should override URL date
+            "--end-date",
+            "2024-06-30",  # CLI date should override URL date
+            "--account-name",
+            "2022 Honda Civic",
+        ]
+
+        with patch("sys.argv", test_args):
+            with patch("cargurus_scraper.cli.URLParser.parse_cargurus_url") as mock_parser:
+                with patch("cargurus_scraper.cli.CarGurusScraper") as mock_scraper_class:
+                    # Setup mocks - URL contains dates that should be overridden
+                    mock_parser.return_value = ("Honda-Civic-d2441", "c32015", "2021-12-31", "2022-12-31")
+                    mock_scraper = Mock()
+                    mock_scraper.scrape.return_value = "output/test_file.csv"
+                    mock_scraper_class.return_value = mock_scraper
+
+                    main()
+
+                    # Verify CLI dates take priority over URL dates
+                    mock_scraper.scrape.assert_called_once_with(
+                        entity_id="c32015",
+                        model_path="Honda-Civic-d2441",
+                        start_date_str="2024-01-01",  # CLI date, not URL date (2021-12-31)
+                        end_date_str="2024-06-30",  # CLI date, not URL date (2022-12-31)
+                        account_name="2022 Honda Civic",
+                    )
+
+    def test_main_url_fallback_to_url_dates(self):
+        """Test that URL dates are used when CLI dates are not provided."""
+        test_args = [
+            "cargurus-scraper",
+            "--url",
+            "https://www.cargurus.com/research/price-trends/Honda-Civic-d2441?entityIds=c32015&startDate=1640995200000&endDate=1672531199000",
+            "--account-name",
+            "2022 Honda Civic",
+            # No CLI dates provided
+        ]
+
+        with patch("sys.argv", test_args):
+            with patch("cargurus_scraper.cli.URLParser.parse_cargurus_url") as mock_parser:
+                with patch("cargurus_scraper.cli.CarGurusScraper") as mock_scraper_class:
+                    # Setup mocks - URL contains dates that should be used
+                    mock_parser.return_value = ("Honda-Civic-d2441", "c32015", "2021-12-31", "2022-12-31")
+                    mock_scraper = Mock()
+                    mock_scraper.scrape.return_value = "output/test_file.csv"
+                    mock_scraper_class.return_value = mock_scraper
+
+                    main()
+
+                    # Verify URL dates are used when no CLI dates provided
+                    mock_scraper.scrape.assert_called_once_with(
+                        entity_id="c32015",
+                        model_path="Honda-Civic-d2441",
+                        start_date_str="2021-12-31",  # URL date used
+                        end_date_str="2022-12-31",  # URL date used
+                        account_name="2022 Honda Civic",
+                    )
 
     def test_main_missing_account_name(self):
         """Test CLI with missing required account-name parameter."""
@@ -125,26 +181,7 @@ class TestCLI:
             "c32015",
             "--model-path",
             "Honda-Civic-d2441",
-            "--session-cookie",
-            "test_cookie",
             # Missing --account-name
-        ]
-
-        with patch("sys.argv", test_args):
-            with pytest.raises(SystemExit):
-                main()
-
-    def test_main_missing_session_cookie(self):
-        """Test CLI with missing required session-cookie parameter."""
-        test_args = [
-            "cargurus-scraper",
-            "--entity-id",
-            "c32015",
-            "--model-path",
-            "Honda-Civic-d2441",
-            "--account-name",
-            "2022 Honda Civic",
-            # Missing --session-cookie
         ]
 
         with patch("sys.argv", test_args):
@@ -161,8 +198,6 @@ class TestCLI:
             "c32015",  # Conflict with URL
             "--account-name",
             "2022 Honda Civic",
-            "--session-cookie",
-            "test_cookie",
         ]
 
         with patch("sys.argv", test_args):
@@ -181,8 +216,6 @@ class TestCLI:
             "Honda-Civic-d2441",
             "--account-name",
             "2022 Honda Civic",
-            "--session-cookie",
-            "test_cookie",
             # Missing --entity-id and --url
         ]
 
@@ -201,8 +234,6 @@ class TestCLI:
             "c32015",
             "--account-name",
             "2022 Honda Civic",
-            "--session-cookie",
-            "test_cookie",
             # Missing --model-path and --url
         ]
 
@@ -221,8 +252,6 @@ class TestCLI:
             "https://invalid-url.com/not-cargurus",
             "--account-name",
             "2022 Honda Civic",
-            "--session-cookie",
-            "test_cookie",
         ]
 
         with patch("sys.argv", test_args):
@@ -245,8 +274,6 @@ class TestCLI:
             "Honda-Civic-d2441",
             "--account-name",
             "2022 Honda Civic",
-            "--session-cookie",
-            "test_cookie",
         ]
 
         with patch("sys.argv", test_args):
@@ -283,8 +310,6 @@ class TestCLI:
             "Honda-Civic-d2441",
             "--account-name",
             "2022 Honda Civic",
-            "--session-cookie",
-            "test_cookie",
         ]
 
         with patch("sys.argv", test_args):
@@ -313,8 +338,6 @@ class TestCLI:
             "Honda-Civic-d2441",
             "--account-name",
             "2022 Honda Civic",
-            "--session-cookie",
-            "test_cookie",
         ]
 
         with patch("sys.argv", test_args):

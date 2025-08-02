@@ -21,7 +21,6 @@ def main():
     parser.add_argument(
         "--account-name", required=True, help="Vehicle name for Monarch CSV (e.g., '2022 Honda Civic EX-L')"
     )
-    parser.add_argument("--session-cookie", required=True, help="JSESSIONID cookie value from CarGurus")
 
     args = parser.parse_args()
 
@@ -35,14 +34,18 @@ def main():
             print(f"   └── Extracted model-path: {model_path}")
             print(f"   └── Extracted entity-id: {entity_id}")
 
-            # Use URL dates as priority, then CLI args, then defaults
-            start_date_str = url_start_date or args.start_date
-            end_date_str = url_end_date or args.end_date
+            # Use CLI args as priority, then URL dates, then defaults
+            start_date_str = args.start_date or url_start_date
+            end_date_str = args.end_date or url_end_date
 
             if url_start_date:
-                print(f"   └── Extracted start-date: {url_start_date}")
+                print(f"   └── Extracted start-date from URL: {url_start_date}")
             if url_end_date:
-                print(f"   └── Extracted end-date: {url_end_date}")
+                print(f"   └── Extracted end-date from URL: {url_end_date}")
+            if args.start_date:
+                print(f"   └── Using CLI start-date: {args.start_date}")
+            if args.end_date:
+                print(f"   └── Using CLI end-date: {args.end_date}")
         else:
             if not args.entity_id or not args.model_path:
                 raise ValueError("Error: Must provide either --url OR both --entity-id and --model-path")
@@ -59,7 +62,6 @@ def main():
             start_date_str=start_date_str,
             end_date_str=end_date_str,
             account_name=args.account_name,
-            session_cookie=args.session_cookie,
         )
 
         print(f"🎉 Successfully generated CSV file: {filename}")

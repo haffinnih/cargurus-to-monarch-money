@@ -16,13 +16,14 @@ Enjoy! 🫡
 
 ## Features
 
-- 📊 Extracts historical vehicle price data from CarGurus
+- 📊 Extracts historical vehicle price data from CarGurus **without requiring authentication**
 - 💰 Outputs CSV files compatible with Monarch Money import format
 - 📅 Handles date range chunking automatically for granular data
 - 🔄 Forward-fills missing data points to maintain continuity
 - ✅ Comprehensive input validation and error handling
 - ⏱️ Rate limiting to respect API constraints
-- 🔗 URL parsing for easy parameter extraction
+- 🔗 **Smart URL parsing** - automatically extracts dates, model info, and entity IDs from CarGurus URLs
+- 📊 **Intelligent date priority** - uses URL dates first, then CLI arguments, then sensible defaults
 
 ## Installation & Usage
 
@@ -35,7 +36,12 @@ This project uses [uv](https://docs.astral.sh/uv/) for dependency management. Ma
 git clone https://github.com/haffinnih/cargurus-to-monarch-money.git
 cd cargurus-to-monarch-money
 
-# Run the scraper
+# Run the scraper with just a URL and account name - no session cookies needed!
+uv run cargurus-scraper \
+  --url "https://www.cargurus.com/research/price-trends/Honda-Civic-d2441?entityIds=c32015" \
+  --account-name "2022 Honda Civic EX-L"
+
+# Or see all available options
 uv run cargurus-scraper --help
 ```
 
@@ -44,26 +50,23 @@ uv run cargurus-scraper --help
 ```bash
 # Using URL (easiest method - just copy from your browser!)
 uv run cargurus-scraper \
-  --url "https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchback-d2441?entityIds=c32015&startDate=1740805200000&endDate=1754193599999" \
-  --account-name "2022 Honda Civic EX-L" \
-  --session-cookie "ABC123XYZ456"
+  --url "https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchbook-d2441?entityIds=c32015&startDate=1740805200000&endDate=1754193599999" \
+  --account-name "2022 Honda Civic EX-L"
 
 # Or with individual parameters and specific dates
 uv run cargurus-scraper \
   --entity-id "c32015" \
-  --model-path "Honda-Civic-Hatchback-d2441" \
+  --model-path "Honda-Civic-Hatchbook-d2441" \
   --start-date "2024-01-01" \
   --end-date "2024-06-30" \
-  --account-name "2022 Honda Civic EX-L" \
-  --session-cookie "ABC123XYZ456"
+  --account-name "2022 Honda Civic EX-L"
 
-# Using URL with custom date range
+# Using URL with custom date range (CLI dates override URL dates)
 uv run cargurus-scraper \
-  --url "https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchback-d2441?entityIds=c32015" \
+  --url "https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchbook-d2441?entityIds=c32015" \
   --start-date "2024-01-01" \
   --end-date "2024-06-30" \
-  --account-name "2022 Honda Civic EX-L" \
-  --session-cookie "ABC123XYZ456"
+  --account-name "2022 Honda Civic EX-L"
 ```
 
 ### Parameters
@@ -76,7 +79,6 @@ uv run cargurus-scraper \
 | `--start-date`     | Start date in YYYY-MM-DD format (optional, defaults to 1 year ago) | `2025-01-01`                  |
 | `--end-date`       | End date in YYYY-MM-DD format (optional, defaults to yesterday)    | `2025-12-31`                  |
 | `--account-name`   | Vehicle name for CSV output                                        | `2022 Honda Civic EX-L`       |
-| `--session-cookie` | JSESSIONID cookie from CarGurus                                    | `ABC123XYZ456`                |
 
 ### Getting Required Parameters
 
@@ -87,24 +89,27 @@ uv run cargurus-scraper \
 3. Uncheck all charts except the one you want to fetch
 4. Copy the entire URL from your browser - it will look like:
    ```
-   https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchback-d2441?entityIds=c32015&startDate=1740805200000&endDate=1754107199999
+   https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchbook-d2441?entityIds=c32015&startDate=1740805200000&endDate=1754107199999
    ```
 5. Use this URL directly with the `--url` parameter
+6. The tool will automatically extract:
+   - **Model path** and **Entity ID** from the URL
+   - **Start and end dates** from URL parameters (if present)
 
 #### Method 2: Manual Parameter Extraction
 
 If you prefer to extract the parameters manually:
 1. From the URL above, note:
-   - Model path: `Honda-Civic-Hatchback-d2441` (from the URL path)
+   - Model path: `Honda-Civic-Hatchbook-d2441` (from the URL path)
    - Entity ID: `c32015` (from the `entityIds` parameter)
 2. Use these with `--entity-id` and `--model-path` parameters
 
-#### Getting Session Cookie
+#### Date Priority
 
-1. Open browser developer tools (F12)
-2. Go to Application/Storage tab → Cookies → cargurus.com
-3. Find the `JSESSIONID` cookie value
-4. Copy the value (without "JSESSIONID=")
+The tool uses the following priority for date selection:
+1. **CLI arguments** (`--start-date` and `--end-date`) - highest priority
+2. **URL dates** (from `startDate` and `endDate` parameters) - medium priority  
+3. **Default values** (1 year ago to yesterday) - lowest priority
 
 ## Output
 
@@ -146,13 +151,11 @@ The script provides clear error messages for common issues:
 - **Start date too old:** "Error: Start date cannot be more than 1 year ago"
 - **End date in future:** "Error: End date cannot be in the future"
 - **Missing parameters:** "Error: Missing required parameter: entity_id"
-- **Invalid session:** "Error: Invalid session cookie. Please provide a valid JSESSIONID"
 - **No data found:** "Error: No price data available for the specified vehicle and date range"
 
 ## Limitations
 
 - Start date cannot be more than 1 year ago (CarGurus API limitation)
-- Requires valid JSESSIONID cookie from an active CarGurus session
 - Rate limited to prevent overwhelming the API
 - Data availability depends on CarGurus having price information for your vehicle
 
@@ -163,16 +166,10 @@ The script provides clear error messages for common issues:
 ```bash
 uv run cargurus-scraper \
   --url "https://www.cargurus.com/research/price-trends/Toyota-Corolla-d295?entityIds=c26003" \
-  --account-name "2017 Toyota Corolla" \
-  --session-cookie "your_session_cookie_here"
+  --account-name "2017 Toyota Corolla"
 ```
 
 ## Troubleshooting
-
-### "Invalid session cookie" error
-
-- Your JSESSIONID cookie has expired
-- Get a fresh cookie by navigating around CarGurus again
 
 ### "Rate limited" error
 
