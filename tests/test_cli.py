@@ -26,7 +26,7 @@ class TestCLI:
             with patch("cargurus_scraper.cli.URLParser.parse_cargurus_url") as mock_parser:
                 with patch("cargurus_scraper.cli.CarGurusScraper") as mock_scraper_class:
                     # Setup mocks
-                    mock_parser.return_value = ("Honda-Civic-d2441", "c32015")
+                    mock_parser.return_value = ("Honda-Civic-d2441", "c32015", None, None)
                     mock_scraper = Mock()
                     mock_scraper.scrape.return_value = "output/test_file.csv"
                     mock_scraper_class.return_value = mock_scraper

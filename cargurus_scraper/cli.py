@@ -31,22 +31,33 @@ def main():
                 raise ValueError("Error: Cannot specify both --url and individual --entity-id/--model-path parameters")
 
             print("🔗 Parsing CarGurus URL...")
-            model_path, entity_id = URLParser.parse_cargurus_url(args.url)
+            model_path, entity_id, url_start_date, url_end_date = URLParser.parse_cargurus_url(args.url)
             print(f"   └── Extracted model-path: {model_path}")
             print(f"   └── Extracted entity-id: {entity_id}")
+
+            # Use URL dates as priority, then CLI args, then defaults
+            start_date_str = url_start_date or args.start_date
+            end_date_str = url_end_date or args.end_date
+
+            if url_start_date:
+                print(f"   └── Extracted start-date: {url_start_date}")
+            if url_end_date:
+                print(f"   └── Extracted end-date: {url_end_date}")
         else:
             if not args.entity_id or not args.model_path:
                 raise ValueError("Error: Must provide either --url OR both --entity-id and --model-path")
 
             entity_id = args.entity_id
             model_path = args.model_path
+            start_date_str = args.start_date
+            end_date_str = args.end_date
 
         scraper = CarGurusScraper()
         filename = scraper.scrape(
             entity_id=entity_id,
             model_path=model_path,
-            start_date_str=args.start_date,
-            end_date_str=args.end_date,
+            start_date_str=start_date_str,
+            end_date_str=end_date_str,
             account_name=args.account_name,
             session_cookie=args.session_cookie,
         )
