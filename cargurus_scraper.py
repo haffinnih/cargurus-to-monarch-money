@@ -30,7 +30,7 @@ class InputValidator:
             raise ValueError(f"Error: Date must be in YYYY-MM-DD format, got: {date_str}")
 
     @staticmethod
-    def validate_date_range(start_date: datetime, end_date: datetime) -> datetime:
+    def validate_date_range(start_date: datetime, end_date: datetime) -> Tuple[datetime, datetime]:
         """Validate date range constraints and offer earliest possible date if needed."""
         today = datetime.now().date()
         earliest_allowed_date = today - timedelta(days=365)
@@ -46,14 +46,30 @@ class InputValidator:
             response = input("Would you like to use the earliest possible date instead? (y/n): ").lower().strip()
             if response in ['y', 'yes']:
                 print(f"✅ Using {earliest_date} as start date")
-                return datetime.combine(earliest_allowed_date, datetime.min.time())
+                start_date = datetime.combine(earliest_allowed_date, datetime.min.time())
             else:
                 raise ValueError("Error: Start date cannot be more than 1 year ago")
 
         if start_date >= end_date:
             raise ValueError("Error: Start date must be before end date")
         
-        return start_date
+        # Check if end date is in the future (past yesterday)
+        yesterday = today - timedelta(days=1)
+        if end_date.date() > yesterday:
+            yesterday_str = yesterday.strftime('%Y-%m-%d')
+            end_date_str = end_date.strftime('%Y-%m-%d')
+            
+            print(f"⚠️  End date {end_date_str} is in the future.")
+            print(f"📅 CarGurus typically doesn't have data past yesterday: {yesterday_str}")
+            
+            response = input("Would you like to use yesterday as the end date instead? (y/n): ").lower().strip()
+            if response in ['y', 'yes']:
+                print(f"✅ Using {yesterday_str} as end date")
+                end_date = datetime.combine(yesterday, datetime.min.time())
+            else:
+                raise ValueError("Error: End date cannot be in the future")
+        
+        return start_date, end_date
 
     @staticmethod
     def validate_required_params(**kwargs) -> None:
@@ -285,7 +301,7 @@ class CarGurusScraper:
             end_date = datetime.now() - timedelta(days=1)
             print(f"📅 No end date provided, using yesterday: {end_date.strftime('%Y-%m-%d')}")
         
-        start_date = self.validator.validate_date_range(start_date, end_date)
+        start_date, end_date = self.validator.validate_date_range(start_date, end_date)
         print("✅ Input validation complete")
 
         # Initialize API client
