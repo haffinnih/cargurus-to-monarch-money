@@ -21,31 +21,30 @@ import requests
 
 class URLParser:
     """Handles parsing of CarGurus URLs to extract parameters."""
-    
+
     @staticmethod
     def parse_cargurus_url(url: str) -> Tuple[str, str]:
         """Parse CarGurus URL to extract model path and entity ID."""
         try:
-            cleaned_url = url.replace('\\?', '?').replace('\\=', '=').replace('\\&', '&')
+            cleaned_url = url.replace("\\?", "?").replace("\\=", "=").replace("\\&", "&")
             parsed_url = urlparse(cleaned_url)
 
-            
-            path_parts = parsed_url.path.split('/')
-            if len(path_parts) < 3 or 'price-trends' not in path_parts:
+            path_parts = parsed_url.path.split("/")
+            if len(path_parts) < 3 or "price-trends" not in path_parts:
                 raise ValueError("Invalid CarGurus URL: Must be a price-trends URL")
-            
+
             model_path = path_parts[-1]
-            
+
             query_params = parse_qs(parsed_url.query)
-            entity_ids = query_params.get('entityIds', [])
-            
+            entity_ids = query_params.get("entityIds", [])
+
             if not entity_ids:
                 raise ValueError("Invalid CarGurus URL: Missing entityIds parameter")
-            
+
             entity_id = entity_ids[0]
-            
+
             return model_path, entity_id
-            
+
         except Exception as e:
             raise ValueError(f"Error parsing CarGurus URL: {str(e)}")
 
@@ -68,14 +67,14 @@ class InputValidator:
         earliest_allowed_date = today - timedelta(days=365)
 
         if start_date.date() < earliest_allowed_date:
-            earliest_date = earliest_allowed_date.strftime('%Y-%m-%d')
-            provided_date = start_date.strftime('%Y-%m-%d')
-            
+            earliest_date = earliest_allowed_date.strftime("%Y-%m-%d")
+            provided_date = start_date.strftime("%Y-%m-%d")
+
             print(f"⚠️  Start date {provided_date} is more than 1 year ago.")
             print(f"📅 The earliest possible date is: {earliest_date}")
-            
+
             response = input("Would you like to use the earliest possible date instead? (y/n): ").lower().strip()
-            if response in ['y', 'yes']:
+            if response in ["y", "yes"]:
                 print(f"✅ Using {earliest_date} as start date")
                 start_date = datetime.combine(earliest_allowed_date, datetime.min.time())
             else:
@@ -83,22 +82,22 @@ class InputValidator:
 
         if start_date >= end_date:
             raise ValueError("Error: Start date must be before end date")
-        
+
         yesterday = today - timedelta(days=1)
         if end_date.date() > yesterday:
-            yesterday_str = yesterday.strftime('%Y-%m-%d')
-            end_date_str = end_date.strftime('%Y-%m-%d')
-            
+            yesterday_str = yesterday.strftime("%Y-%m-%d")
+            end_date_str = end_date.strftime("%Y-%m-%d")
+
             print(f"⚠️  End date {end_date_str} is in the future.")
             print(f"📅 CarGurus typically doesn't have data past yesterday: {yesterday_str}")
-            
+
             response = input("Would you like to use yesterday as the end date instead? (y/n): ").lower().strip()
-            if response in ['y', 'yes']:
+            if response in ["y", "yes"]:
                 print(f"✅ Using {yesterday_str} as end date")
                 end_date = datetime.combine(yesterday, datetime.min.time())
             else:
                 raise ValueError("Error: End date cannot be in the future")
-        
+
         return start_date, end_date
 
     @staticmethod
@@ -261,7 +260,7 @@ class CSVExporter:
         """Generate CSV file with Monarch Money format."""
         output_dir = Path("output")
         output_dir.mkdir(exist_ok=True)
-        
+
         sanitized_name = CSVExporter.sanitize_filename(account_name)
         filename = f"{sanitized_name}_{start_date}_{end_date}.csv"
         filepath = output_dir / filename
@@ -313,13 +312,13 @@ class CarGurusScraper:
             earliest_date = today - timedelta(days=365)
             start_date = datetime.combine(earliest_date, datetime.min.time())
             print(f"📅 No start date provided, using earliest possible date: {start_date.strftime('%Y-%m-%d')}")
-        
+
         if end_date_str:
             end_date = self.validator.validate_date_format(end_date_str)
         else:
             end_date = datetime.now() - timedelta(days=1)
             print(f"📅 No end date provided, using yesterday: {end_date.strftime('%Y-%m-%d')}")
-        
+
         start_date, end_date = self.validator.validate_date_range(start_date, end_date)
         print("✅ Input validation complete")
 
@@ -330,10 +329,10 @@ class CarGurusScraper:
         all_price_points = []
 
         for i, (chunk_start, chunk_end) in enumerate(chunks):
-            chunk_start_str = chunk_start.strftime('%Y-%m-%d')
-            chunk_end_str = chunk_end.strftime('%Y-%m-%d')
-            print(f"📡 Fetching chunk {i+1}/{len(chunks)}: {chunk_start_str} to {chunk_end_str}")
-            
+            chunk_start_str = chunk_start.strftime("%Y-%m-%d")
+            chunk_end_str = chunk_end.strftime("%Y-%m-%d")
+            print(f"📡 Fetching chunk {i + 1}/{len(chunks)}: {chunk_start_str} to {chunk_end_str}")
+
             if i > 0:
                 time.sleep(1)
 
@@ -348,27 +347,27 @@ class CarGurusScraper:
                     continue
                 else:
                     raise
-        
+
         print(f"✅ Data fetching complete - {len(all_price_points)} total price points")
 
         print("🔄 Processing price data...")
         processed_data = self.data_processor.process_price_points(all_price_points)
         print(f"   └── Processed {len(processed_data)} unique price points")
-        
+
         print("📝 Filling date gaps with forward-fill...")
         filled_data = self.data_processor.fill_date_gaps(processed_data, start_date, end_date)
         total_days = (end_date - start_date).days + 1
         print(f"   └── Generated {len(filled_data)} daily records (expected: {total_days})")
-        
+
         if filled_data and len(processed_data) > 0:
             last_actual_date = max(processed_data, key=lambda x: x[0])[0]
-            end_date_str = end_date.strftime('%Y-%m-%d')
+            end_date_str = end_date.strftime("%Y-%m-%d")
             if last_actual_date != end_date_str:
                 print(f"ℹ️  Note: Forward-filled from {last_actual_date} to {end_date_str} due to missing recent data")
 
         print("💾 Generating CSV file...")
-        actual_start_date_str = start_date_str if start_date_str else start_date.strftime('%Y-%m-%d')
-        actual_end_date_str = end_date_str if end_date_str else end_date.strftime('%Y-%m-%d')
+        actual_start_date_str = start_date_str if start_date_str else start_date.strftime("%Y-%m-%d")
+        actual_end_date_str = end_date_str if end_date_str else end_date.strftime("%Y-%m-%d")
         filename = self.csv_exporter.generate_csv(filled_data, account_name, actual_start_date_str, actual_end_date_str)
 
         return filename
@@ -381,7 +380,9 @@ def main():
     parser.add_argument("--url", help="Full CarGurus price-trends URL (alternative to --entity-id and --model-path)")
     parser.add_argument("--entity-id", help="CarGurus entity ID (e.g., 'c32015')")
     parser.add_argument("--model-path", help="URL path segment (e.g., 'Honda-Civic-Hatchbook-d2441')")
-    parser.add_argument("--start-date", help="Start date in YYYY-MM-DD format (defaults to earliest possible date if not provided)")
+    parser.add_argument(
+        "--start-date", help="Start date in YYYY-MM-DD format (defaults to earliest possible date if not provided)"
+    )
     parser.add_argument("--end-date", help="End date in YYYY-MM-DD format (defaults to yesterday if not provided)")
     parser.add_argument(
         "--account-name", required=True, help="Vehicle name for Monarch CSV (e.g., '2022 Honda Civic EX-L')"
@@ -394,7 +395,7 @@ def main():
         if args.url:
             if args.entity_id or args.model_path:
                 raise ValueError("Error: Cannot specify both --url and individual --entity-id/--model-path parameters")
-            
+
             print("🔗 Parsing CarGurus URL...")
             model_path, entity_id = URLParser.parse_cargurus_url(args.url)
             print(f"   └── Extracted model-path: {model_path}")
@@ -402,7 +403,7 @@ def main():
         else:
             if not args.entity_id or not args.model_path:
                 raise ValueError("Error: Must provide either --url OR both --entity-id and --model-path")
-            
+
             entity_id = args.entity_id
             model_path = args.model_path
 
