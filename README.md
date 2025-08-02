@@ -184,3 +184,5 @@ uv run python cargurus_scraper.py --help
 ## License
 
 This project is for personal use only. Respect CarGurus' terms of service and rate limits.
+
+[MIT License](LICENSE)
