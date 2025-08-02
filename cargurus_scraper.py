@@ -245,6 +245,7 @@ class CarGurusScraper:
     ) -> str:
         """Main scraping method."""
 
+        print("🔍 Validating inputs...")
         # Validate inputs
         self.validator.validate_required_params(
             entity_id=entity_id,
@@ -258,27 +259,43 @@ class CarGurusScraper:
         start_date = self.validator.validate_date_format(start_date_str)
         end_date = self.validator.validate_date_format(end_date_str)
         self.validator.validate_date_range(start_date, end_date)
+        print("✅ Input validation complete")
 
         # Initialize API client
         self.api_client = CarGurusAPIClient(session_cookie)
 
         # Generate monthly chunks and fetch data
         chunks = self.date_processor.generate_monthly_chunks(start_date, end_date)
+        print(f"📅 Fetching data in {len(chunks)} monthly chunks...")
         all_price_points = []
 
         for i, (chunk_start, chunk_end) in enumerate(chunks):
+            chunk_start_str = chunk_start.strftime('%Y-%m-%d')
+            chunk_end_str = chunk_end.strftime('%Y-%m-%d')
+            print(f"📡 Fetching chunk {i+1}/{len(chunks)}: {chunk_start_str} to {chunk_end_str}")
+            
             if i > 0:  # Rate limiting
                 time.sleep(1)
 
             response = self.api_client.fetch_price_data(model_path, entity_id, chunk_start, chunk_end)
             price_points = self.data_processor.extract_price_points(response)
+            print(f"   └── Found {len(price_points)} price points")
             all_price_points.extend(price_points)
+        
+        print(f"✅ Data fetching complete - {len(all_price_points)} total price points")
 
         # Process data
+        print("🔄 Processing price data...")
         processed_data = self.data_processor.process_price_points(all_price_points)
+        print(f"   └── Processed {len(processed_data)} unique price points")
+        
+        print("📝 Filling date gaps with forward-fill...")
         filled_data = self.data_processor.fill_date_gaps(processed_data, start_date, end_date)
+        total_days = (end_date - start_date).days + 1
+        print(f"   └── Generated {len(filled_data)} daily records (expected: {total_days})")
 
         # Generate CSV
+        print("💾 Generating CSV file...")
         filename = self.csv_exporter.generate_csv(filled_data, account_name, start_date_str, end_date_str)
 
         return filename
@@ -310,7 +327,7 @@ def main():
             session_cookie=args.session_cookie,
         )
 
-        print(f"Successfully generated CSV file: {filename}")
+        print(f"🎉 Successfully generated CSV file: {filename}")
 
     except Exception as e:
         print(str(e), file=sys.stderr)
