@@ -1,6 +1,6 @@
 # CarGurus to Monarch Money Vehicle Value Scraper
 
-A Python script that extracts daily vehicle price data from CarGurus API and formats it for import into Monarch Money's vehicle tracking system.
+A Python script that extracts daily vehicle price data from [CarGurus](https://www.cargurus.com/) API and formats it for import into [Monarch Money](https://www.monarchmoney.com/)'s vehicle tracking system.
 
 I've been wanting to create this for months(? probably over a year at this point). It was a relatively simple mini-project, but I just hadn't made the time to complete it.
 
