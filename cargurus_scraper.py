@@ -320,10 +320,19 @@ class CarGurusScraper:
             if i > 0:  # Rate limiting
                 time.sleep(1)
 
-            response = self.api_client.fetch_price_data(model_path, entity_id, chunk_start, chunk_end)
-            price_points = self.data_processor.extract_price_points(response)
-            print(f"   └── Found {len(price_points)} price points")
-            all_price_points.extend(price_points)
+            try:
+                response = self.api_client.fetch_price_data(model_path, entity_id, chunk_start, chunk_end)
+                price_points = self.data_processor.extract_price_points(response)
+                print(f"   └── Found {len(price_points)} price points")
+                all_price_points.extend(price_points)
+            except ValueError as e:
+                if "No price data available" in str(e):
+                    print("   └── No data available for this period (will forward-fill)")
+                    # Continue processing - we'll handle gaps in the fill_date_gaps method
+                    continue
+                else:
+                    # Re-raise other ValueError exceptions
+                    raise
         
         print(f"✅ Data fetching complete - {len(all_price_points)} total price points")
 
@@ -336,6 +345,13 @@ class CarGurusScraper:
         filled_data = self.data_processor.fill_date_gaps(processed_data, start_date, end_date)
         total_days = (end_date - start_date).days + 1
         print(f"   └── Generated {len(filled_data)} daily records (expected: {total_days})")
+        
+        # Check if we had to forward-fill at the end due to missing recent data
+        if filled_data and len(processed_data) > 0:
+            last_actual_date = max(processed_data, key=lambda x: x[0])[0]
+            end_date_str = end_date.strftime('%Y-%m-%d')
+            if last_actual_date != end_date_str:
+                print(f"ℹ️  Note: Forward-filled from {last_actual_date} to {end_date_str} due to missing recent data")
 
         # Generate CSV
         print("💾 Generating CSV file...")
