@@ -1,0 +1,722 @@
+{
+  "locale": "en_US",
+  "type": "model",
+  "entityId": "d2441",
+  "priceTrends": [
+    {
+      "type": "CG_INDEX",
+      "entities": [
+        {
+          "label": "CarGurus Index",
+          "entityId": "Index",
+          "priceTrends": [
+            {
+              "tw": 0,
+              "averagePrice": 27958,
+              "percentChangeToToday": 0
+            },
+            {
+              "tw": 30,
+              "averagePrice": 27932,
+              "percentChangeToToday": 0.09
+            },
+            {
+              "tw": 90,
+              "averagePrice": 27617,
+              "percentChangeToToday": 1.23
+            },
+            {
+              "tw": 365,
+              "averagePrice": 27817,
+              "percentChangeToToday": 0.51
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "MODELS",
+      "entities": [
+        {
+          "label": "Civic Hatchback",
+          "entityId": "d2441",
+          "priceTrends": [
+            {
+              "tw": 0,
+              "averagePrice": 23116,
+              "percentChangeToToday": 0
+            },
+            {
+              "tw": 30,
+              "averagePrice": 23376,
+              "percentChangeToToday": -1.11
+            },
+            {
+              "tw": 90,
+              "averagePrice": 23276,
+              "percentChangeToToday": -0.69
+            },
+            {
+              "tw": 365,
+              "averagePrice": 22971,
+              "percentChangeToToday": 0.63
+            }
+          ],
+          "parent": {
+            "label": "Honda",
+            "entityId": "m6"
+          }
+        }
+      ]
+    },
+    {
+      "type": "CARS",
+      "entities": [
+        {
+          "label": "2017 Civic Hatchback",
+          "entityId": "c26201",
+          "priceTrends": [
+            {
+              "tw": 0,
+              "averagePrice": 16887,
+              "percentChangeToToday": 0
+            },
+            {
+              "tw": 30,
+              "averagePrice": 17032,
+              "percentChangeToToday": -0.85
+            },
+            {
+              "tw": 90,
+              "averagePrice": 17014,
+              "percentChangeToToday": -0.75
+            },
+            {
+              "tw": 365,
+              "averagePrice": 17240,
+              "percentChangeToToday": -2.04
+            }
+          ]
+        },
+        {
+          "label": "2018 Civic Hatchback",
+          "entityId": "c27125",
+          "priceTrends": [
+            {
+              "tw": 0,
+              "averagePrice": 18147,
+              "percentChangeToToday": 0
+            },
+            {
+              "tw": 30,
+              "averagePrice": 18366,
+              "percentChangeToToday": -1.19
+            },
+            {
+              "tw": 90,
+              "averagePrice": 18327,
+              "percentChangeToToday": -0.98
+            },
+            {
+              "tw": 365,
+              "averagePrice": 18865,
+              "percentChangeToToday": -3.8
+            }
+          ]
+        },
+        {
+          "label": "2019 Civic Hatchback",
+          "entityId": "c28905",
+          "priceTrends": [
+            {
+              "tw": 0,
+              "averagePrice": 20052,
+              "percentChangeToToday": 0
+            },
+            {
+              "tw": 30,
+              "averagePrice": 20126,
+              "percentChangeToToday": -0.37
+            },
+            {
+              "tw": 90,
+              "averagePrice": 19986,
+              "percentChangeToToday": 0.33
+            },
+            {
+              "tw": 365,
+              "averagePrice": 20573,
+              "percentChangeToToday": -2.53
+            }
+          ]
+        },
+        {
+          "label": "2020 Civic Hatchback",
+          "entityId": "c29652",
+          "priceTrends": [
+            {
+              "tw": 0,
+              "averagePrice": 21740,
+              "percentChangeToToday": 0
+            },
+            {
+              "tw": 30,
+              "averagePrice": 21841,
+              "percentChangeToToday": -0.46
+            },
+            {
+              "tw": 90,
+              "averagePrice": 21611,
+              "percentChangeToToday": 0.6
+            },
+            {
+              "tw": 365,
+              "averagePrice": 22046,
+              "percentChangeToToday": -1.39
+            }
+          ]
+        },
+        {
+          "label": "2021 Civic Hatchback",
+          "entityId": "c30953",
+          "priceTrends": [
+            {
+              "tw": 0,
+              "averagePrice": 22522,
+              "percentChangeToToday": 0
+            },
+            {
+              "tw": 30,
+              "averagePrice": 22669,
+              "percentChangeToToday": -0.65
+            },
+            {
+              "tw": 90,
+              "averagePrice": 22621,
+              "percentChangeToToday": -0.44
+            },
+            {
+              "tw": 365,
+              "averagePrice": 23426,
+              "percentChangeToToday": -3.86
+            }
+          ]
+        },
+        {
+          "label": "2022 Civic Hatchback",
+          "entityId": "c32015",
+          "priceTrends": [
+            {
+              "tw": 0,
+              "averagePrice": 24835,
+              "percentChangeToToday": 0
+            },
+            {
+              "tw": 30,
+              "averagePrice": 24988,
+              "percentChangeToToday": -0.61
+            },
+            {
+              "tw": 90,
+              "averagePrice": 25058,
+              "percentChangeToToday": -0.89
+            },
+            {
+              "tw": 365,
+              "averagePrice": 25538,
+              "percentChangeToToday": -2.75
+            }
+          ]
+        },
+        {
+          "label": "2023 Civic Hatchback",
+          "entityId": "c32657",
+          "priceTrends": [
+            {
+              "tw": 0,
+              "averagePrice": 25491,
+              "percentChangeToToday": 0
+            },
+            {
+              "tw": 30,
+              "averagePrice": 25705,
+              "percentChangeToToday": -0.84
+            },
+            {
+              "tw": 90,
+              "averagePrice": 25934,
+              "percentChangeToToday": -1.71
+            },
+            {
+              "tw": 365,
+              "averagePrice": 26328,
+              "percentChangeToToday": -3.18
+            }
+          ]
+        },
+        {
+          "label": "2024 Civic Hatchback",
+          "entityId": "c33097",
+          "priceTrends": [
+            {
+              "tw": 0,
+              "averagePrice": 26366,
+              "percentChangeToToday": 0
+            },
+            {
+              "tw": 30,
+              "averagePrice": 26618,
+              "percentChangeToToday": -0.94
+            },
+            {
+              "tw": 90,
+              "averagePrice": 27017,
+              "percentChangeToToday": -2.41
+            },
+            {
+              "tw": 365,
+              "averagePrice": 27623,
+              "percentChangeToToday": -4.55
+            }
+          ]
+        },
+        {
+          "label": "2025 Civic Hatchback",
+          "entityId": "c33741",
+          "priceTrends": [
+            {
+              "tw": 0,
+              "averagePrice": 26850,
+              "percentChangeToToday": 0
+            },
+            {
+              "tw": 30,
+              "averagePrice": 27133,
+              "percentChangeToToday": -1.04
+            },
+            {
+              "tw": 90,
+              "averagePrice": 27368,
+              "percentChangeToToday": -1.89
+            },
+            {
+              "tw": 365,
+              "averagePrice": 0,
+              "percentChangeToToday": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name": "Honda Civic Hatchback",
+  "heroPriceTrends": [
+    {
+      "type": "MODELS",
+      "entities": [
+        {
+          "label": "Civic Hatchback",
+          "entityId": "d2441",
+          "priceTrends": [
+            {
+              "tw": 30,
+              "averagePrice": 23376,
+              "percentChangeToToday": -1.11
+            }
+          ],
+          "parent": {
+            "label": "Honda",
+            "entityId": "m6"
+          }
+        }
+      ]
+    }
+  ],
+  "pricePointsEntities": [
+    {
+      "entityId": "c32015",
+      "label": "2022 Civic Hatchback",
+      "pricePoints": [
+        {
+          "date": 1751256000000,
+          "price": 24988.09293193717
+        },
+        {
+          "date": 1751342400000,
+          "price": 24979.12424445937
+        },
+        {
+          "date": 1751428800000,
+          "price": 24971.468644639244
+        },
+        {
+          "date": 1751515200000,
+          "price": 24966.951935914552
+        },
+        {
+          "date": 1751601600000,
+          "price": 24961.911409395972
+        },
+        {
+          "date": 1751688000000,
+          "price": 24956.907244414353
+        }
+      ]
+    }
+  ],
+  "eligibleDateRanges": {
+    "startDate": 1357016400000,
+    "endDate": 1753848000000,
+    "priceTrendsRefreshDataFeatureEnabled": true
+  },
+  "searchParams": {
+    "entityIds": [
+      "c32015"
+    ],
+    "dates": {
+      "startDate": "2025-07-01T00:00:00.000Z",
+      "endDate": "2025-07-05T23:59:59.999Z"
+    }
+  },
+  "priceDropListings": [
+    {
+      "listingId": 412172902,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/05/31/08/55/2022_honda_civic_hatchback-pic-8608406105176745-1024x768.jpeg",
+      "listingTitle": "2022 Honda Civic Hatchback Sport Touring FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 22500,
+      "originalPrice": 25888,
+      "city": "Cathedral City",
+      "state": "CA",
+      "mileage": 73105
+    },
+    {
+      "listingId": 412738289,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/11/08/07/2022_honda_civic_hatchback-pic-4380120714188694219-1024x768.jpeg",
+      "listingTitle": "2022 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 23999,
+      "originalPrice": 26999,
+      "city": "Conway",
+      "state": "SC",
+      "mileage": 30037
+    },
+    {
+      "listingId": 415991998,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/06/29/07/23/2019_honda_civic_hatchback-pic-26853202601369856-1024x768.jpeg",
+      "listingTitle": "2019 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 17933,
+      "originalPrice": 17995,
+      "city": "Houma",
+      "state": "LA",
+      "mileage": 82776
+    },
+    {
+      "listingId": 416469133,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/13/06/33/2023_honda_civic_hatchback-pic-7403032752358973846-1024x768.jpeg",
+      "listingTitle": "2023 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 24196,
+      "originalPrice": 25560,
+      "city": "Soquel",
+      "state": "CA",
+      "mileage": 26042
+    },
+    {
+      "listingId": 416947696,
+      "listingTitle": "2024 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 21464,
+      "originalPrice": 25775,
+      "city": "Cocoa",
+      "state": "FL",
+      "mileage": 30744
+    },
+    {
+      "listingId": 417467396,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/18/07/17/2023_honda_civic_hatchback-pic-903535574937505356-1024x768.jpeg",
+      "listingTitle": "2023 Honda Civic Hatchback LX FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 22495,
+      "originalPrice": 23992,
+      "city": "Boulder",
+      "state": "CO",
+      "mileage": 14390
+    },
+    {
+      "listingId": 417495213,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/06/10/18/51/2022_honda_civic_hatchback-pic-2505172779135149707-1024x768.jpeg",
+      "listingTitle": "2022 Honda Civic Hatchback EX-L FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 18922,
+      "originalPrice": 22827,
+      "city": "Lake City",
+      "state": "FL",
+      "mileage": 79829
+    },
+    {
+      "listingId": 417701799,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/05/30/13/14/2022_honda_civic_hatchback-pic-7659945533020690408-1024x768.jpeg",
+      "listingTitle": "2022 Honda Civic Hatchback EX-L FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 21089,
+      "originalPrice": 27770,
+      "city": "Hillside",
+      "state": "NJ",
+      "mileage": 58069
+    },
+    {
+      "listingId": 417876880,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/06/12/12/39/2019_honda_civic_hatchback-pic-1934790543407304810-1024x768.jpeg",
+      "listingTitle": "2019 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 14695,
+      "originalPrice": 17471,
+      "city": "Ft Myers",
+      "state": "FL",
+      "mileage": 90258
+    },
+    {
+      "listingId": 417911655,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/06/01/13/49/2021_honda_civic_hatchback-pic-7516648431500576-1024x768.jpeg",
+      "listingTitle": "2021 Honda Civic Hatchback EX FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 21511,
+      "originalPrice": 23911,
+      "city": "Bartlesville",
+      "state": "OK",
+      "mileage": 54855
+    },
+    {
+      "listingId": 417931574,
+      "listingTitle": "2023 Honda Civic Hatchback EX-L FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 24755,
+      "originalPrice": 27995,
+      "city": "Temecula",
+      "state": "CA",
+      "mileage": 17542
+    },
+    {
+      "listingId": 418572265,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/06/07/19/38/2019_honda_civic_hatchback-pic-5911499299977956374-1024x768.jpeg",
+      "listingTitle": "2019 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 15995,
+      "originalPrice": 16995,
+      "city": "Chantilly",
+      "state": "VA",
+      "mileage": 98883
+    },
+    {
+      "listingId": 419096299,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/06/13/17/06/2017_honda_civic_hatchback-pic-3667792312546407037-1024x768.jpeg",
+      "listingTitle": "2017 Honda Civic Hatchback Sport",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 12900,
+      "originalPrice": 13900,
+      "city": "Loganville",
+      "state": "GA",
+      "mileage": 128547
+    },
+    {
+      "listingId": 419128665,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/10/20/07/2022_honda_civic_hatchback-pic-6885667716482444354-1024x768.jpeg",
+      "listingTitle": "2022 Honda Civic Hatchback Sport Touring FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 23828,
+      "originalPrice": 24964,
+      "city": "Paramus",
+      "state": "NJ",
+      "mileage": 39790
+    },
+    {
+      "listingId": 419204136,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/03/11/53/2021_honda_civic_hatchback-pic-2383172493500732951-1024x768.jpeg",
+      "listingTitle": "2021 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 20475,
+      "originalPrice": 21480,
+      "city": "Madison",
+      "state": "TN",
+      "mileage": 64493
+    },
+    {
+      "listingId": 419634994,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/06/26/10/57/2025_honda_civic_hatchback-pic-7485438436091276011-1024x768.jpeg",
+      "listingTitle": "2025 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 25987,
+      "originalPrice": 28600,
+      "city": "Austin",
+      "state": "TX",
+      "mileage": 1813
+    },
+    {
+      "listingId": 419673165,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/06/21/09/54/2022_honda_civic_hatchback-pic-964725512333030950-1024x768.jpeg",
+      "listingTitle": "2022 Honda Civic Hatchback Sport Touring FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 19998,
+      "originalPrice": 20998,
+      "city": "Orlando",
+      "state": "FL",
+      "mileage": 75847
+    },
+    {
+      "listingId": 419819128,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/06/29/05/02/2022_honda_civic_hatchback-pic-3169733848002069505-1024x768.jpeg",
+      "listingTitle": "2022 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 23471,
+      "originalPrice": 24968,
+      "city": "Aurora",
+      "state": "CO",
+      "mileage": 27679
+    },
+    {
+      "listingId": 419948299,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/03/20/29/2022_honda_civic_hatchback-pic-7807074178886117469-1024x768.jpeg",
+      "listingTitle": "2022 Honda Civic Hatchback Sport Touring FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 25497,
+      "originalPrice": 26997,
+      "city": "Rockville",
+      "state": "MD",
+      "mileage": 32537
+    },
+    {
+      "listingId": 420122972,
+      "listingTitle": "2023 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 22985,
+      "originalPrice": 23883,
+      "city": "Dublin",
+      "state": "OH",
+      "mileage": 37048
+    },
+    {
+      "listingId": 420298430,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/28/17/03/2018_honda_civic_hatchback-pic-3545404653259453755-1024x768.jpeg",
+      "listingTitle": "2018 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 13484,
+      "originalPrice": 15365,
+      "city": "Punta Gorda",
+      "state": "FL",
+      "mileage": 90970
+    },
+    {
+      "listingId": 420736517,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/05/14/52/2017_honda_civic_hatchback-pic-677407827028380586-1024x768.jpeg",
+      "listingTitle": "2017 Honda Civic Hatchback EX",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 12051,
+      "originalPrice": 12451,
+      "city": "Norco",
+      "state": "CA",
+      "mileage": 129092
+    },
+    {
+      "listingId": 421163252,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/09/00/49/2020_honda_civic_hatchback-pic-287100739581493224-1024x768.jpeg",
+      "listingTitle": "2020 Honda Civic Hatchback EX FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 17350,
+      "originalPrice": 18990,
+      "city": "Little Ferry",
+      "state": "NJ",
+      "mileage": 94891
+    },
+    {
+      "listingId": 421450593,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/23/15/27/2022_honda_civic_hatchback-pic-664259833006683222-1024x768.jpeg",
+      "listingTitle": "2022 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 23998,
+      "originalPrice": 24998,
+      "city": "Renton",
+      "state": "WA",
+      "mileage": 39351
+    },
+    {
+      "listingId": 421658088,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/21/15/56/2019_honda_civic_hatchback-pic-7054339960516310811-1024x768.jpeg",
+      "listingTitle": "2019 Honda Civic Hatchback EX FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 19999,
+      "originalPrice": 21999,
+      "city": "Glendale",
+      "state": "AZ",
+      "mileage": 47929
+    },
+    {
+      "listingId": 422348414,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/31/07/24/2024_honda_civic_hatchback-pic-2513463014165127539-1024x768.jpeg",
+      "listingTitle": "2024 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 25100,
+      "originalPrice": 26000,
+      "city": "Oak Lawn",
+      "state": "IL",
+      "mileage": 7769
+    },
+    {
+      "listingId": 422458424,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/24/08/33/2022_honda_civic_hatchback-pic-8903679304636659643-1024x768.jpeg",
+      "listingTitle": "2022 Honda Civic Hatchback Sport Touring FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 21500,
+      "originalPrice": 22000,
+      "city": "Hemet",
+      "state": "CA",
+      "mileage": 94567
+    },
+    {
+      "listingId": 422483312,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/28/12/15/2021_honda_civic_hatchback-pic-5888111001643193118-1024x768.jpeg",
+      "listingTitle": "2021 Honda Civic Hatchback LX FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 15888,
+      "originalPrice": 18650,
+      "city": "Union",
+      "state": "NJ",
+      "mileage": 66358
+    },
+    {
+      "listingId": 422610347,
+      "listingTitle": "2024 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 24818,
+      "originalPrice": 25523,
+      "city": "Waukee",
+      "state": "IA",
+      "mileage": 12170
+    },
+    {
+      "listingId": 422761044,
+      "imageUrl": "https://static.cargurus.com/images/forsale/2025/07/29/10/39/2023_honda_civic_hatchback-pic-993552411294040511-1024x768.jpeg",
+      "listingTitle": "2023 Honda Civic Hatchback Sport FWD",
+      "dealFinderRating": "GREAT_PRICE",
+      "price": 24418,
+      "originalPrice": 28050,
+      "city": "Soquel",
+      "state": "CA",
+      "mileage": 13685
+    }
+  ],
+  "faqMaxMinPrices": [
+    {
+      "type": "MODELS",
+      "entities": []
+    }
+  ],
+  "metaTexts": {
+    "title": "Honda Civic Hatchback Price Trends and Pricing Insights",
+    "ogTitle": "Honda Civic Hatchback Price Trends and Pricing Insights",
+    "description": "Track Honda Civic Hatchback price trends and get real-time, industry leading Honda Civic Hatchback pricing insights."
+  },
+  "savedListings": [],
+  "modelHeroImage": "//images.ctfassets.net/c9t6u0qhbv9e/IsGMezApwQLZlxX74RT9K/876e92d507a6c910655e04029ea3acb3/CG_2024_Honda_Civic_Sport_Touring_Hatchback_Boost_Blue_Front_Quarter_Left.jpg"
+}
