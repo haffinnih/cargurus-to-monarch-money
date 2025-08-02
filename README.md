@@ -22,8 +22,8 @@ Enjoy! 🫡
 - 🔄 Forward-fills missing data points to maintain continuity
 - ✅ Comprehensive input validation and error handling
 - ⏱️ Rate limiting to respect API constraints
-- 🔗 **Smart URL parsing** - automatically extracts dates, model info, and entity IDs from CarGurus URLs
-- 📊 **Intelligent date priority** - uses CLI arguments first, then URL dates, then sensible defaults
+- 🔗 Smart URL parsing - automatically extracts dates, model info, and entity IDs from CarGurus URLs
+- 📊 Intelligent date priority - uses CLI arguments first, then URL dates, then sensible defaults
 
 ## Installation & Usage
 
