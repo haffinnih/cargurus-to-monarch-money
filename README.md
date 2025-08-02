@@ -16,7 +16,7 @@ Enjoy! 🫡
 
 ## Features
 
-- 📊 Extracts historical vehicle price data from CarGurus **without requiring authentication**
+- 📊 Extracts historical vehicle price data from CarGurus
 - 💰 Outputs CSV files compatible with Monarch Money import format
 - 📅 Handles date range chunking automatically for granular data
 - 🔄 Forward-fills missing data points to maintain continuity
@@ -36,7 +36,7 @@ This project uses [uv](https://docs.astral.sh/uv/) for dependency management. Ma
 git clone https://github.com/haffinnih/cargurus-to-monarch-money.git
 cd cargurus-to-monarch-money
 
-# Run the scraper with just a URL and account name - no session cookies needed!
+# Run the scraper with just a URL and account name
 uv run cargurus-scraper \
   --url "https://www.cargurus.com/research/price-trends/Honda-Civic-d2441?entityIds=c32015" \
   --account-name "2022 Honda Civic EX-L"
