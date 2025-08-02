@@ -3,12 +3,15 @@ name = "cargurus-scraper"
 version = "0.1.0"
 description = "CarGurus to Monarch Money vehicle value scraper"
 authors = [
-    {name = "User"}
+    {name = "Habib Affinnih"}
 ]
 dependencies = [
     "requests>=2.31.0",
 ]
 requires-python = ">=3.8"
+
+[project.scripts]
+cargurus-scraper = "cargurus_scraper.cli:main"
 
 [build-system]
 requires = ["hatchling"]

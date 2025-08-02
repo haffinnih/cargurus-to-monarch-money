@@ -1,6 +1,6 @@
 # CarGurus to Monarch Money Vehicle Value Scraper
 
-A Python script that extracts daily vehicle price data from [CarGurus](https://www.cargurus.com/) API and formats it for import into [Monarch Money](https://www.monarchmoney.com/)'s vehicle tracking system.
+A Python package that extracts daily vehicle price data from [CarGurus](https://www.cargurus.com/) API and formats it for import into [Monarch Money](https://www.monarchmoney.com/)'s vehicle tracking system.
 
 I've been wanting to create this for months(? probably over a year at this point). It was a relatively simple mini-project, but I just hadn't made the time to complete it.
 
@@ -16,28 +16,40 @@ Enjoy! 🫡
 
 ## Features
 
-- Extracts historical vehicle price data from CarGurus
-- Outputs CSV files compatible with Monarch Money import format
-- Handles date range chunking automatically for granular data
-- Forward-fills missing data points to maintain continuity
-- Comprehensive input validation and error handling
-- Rate limiting to respect API constraints
+- 📊 Extracts historical vehicle price data from CarGurus
+- 💰 Outputs CSV files compatible with Monarch Money import format
+- 📅 Handles date range chunking automatically for granular data
+- 🔄 Forward-fills missing data points to maintain continuity
+- ✅ Comprehensive input validation and error handling
+- ⏱️ Rate limiting to respect API constraints
+- 🔗 URL parsing for easy parameter extraction
 
-## Usage
+## Installation & Usage
 
 This project uses [uv](https://docs.astral.sh/uv/) for dependency management. Make sure you have uv installed.
+
+### Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/haffinnih/cargurus-to-monarch-money.git
+cd cargurus-to-monarch-money
+
+# Run the scraper
+uv run cargurus-scraper --help
+```
 
 ### Basic Command
 
 ```bash
 # Using URL (easiest method - just copy from your browser!)
-uv run python cargurus_scraper.py \
+uv run cargurus-scraper \
   --url "https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchback-d2441?entityIds=c32015&startDate=1740805200000&endDate=1754193599999" \
   --account-name "2022 Honda Civic EX-L" \
   --session-cookie "ABC123XYZ456"
 
 # Or with individual parameters and specific dates
-uv run python cargurus_scraper.py \
+uv run cargurus-scraper \
   --entity-id "c32015" \
   --model-path "Honda-Civic-Hatchback-d2441" \
   --start-date "2024-01-01" \
@@ -46,7 +58,7 @@ uv run python cargurus_scraper.py \
   --session-cookie "ABC123XYZ456"
 
 # Using URL with custom date range
-uv run python cargurus_scraper.py \
+uv run cargurus-scraper \
   --url "https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchback-d2441?entityIds=c32015" \
   --start-date "2024-01-01" \
   --end-date "2024-06-30" \
@@ -149,7 +161,7 @@ The script provides clear error messages for common issues:
 ### Toyota Corolla (using URL method)
 
 ```bash
-uv run python cargurus_scraper.py \
+uv run cargurus-scraper \
   --url "https://www.cargurus.com/research/price-trends/Toyota-Corolla-d295?entityIds=c26003" \
   --account-name "2017 Toyota Corolla" \
   --session-cookie "your_session_cookie_here"
@@ -186,7 +198,10 @@ To modify or extend the scraper:
 uv sync
 
 # View help
-uv run python cargurus_scraper.py --help
+uv run cargurus-scraper --help
+
+# Run the package directly (alternative to console script)
+uv run python -m cargurus_scraper.cli --help
 ```
 
 ## License
