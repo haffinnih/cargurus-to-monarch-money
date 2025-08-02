@@ -13,7 +13,7 @@ import sys
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import requests
 
@@ -57,7 +57,7 @@ class InputValidator:
     @staticmethod
     def validate_required_params(**kwargs) -> None:
         """Validate all required parameters are provided."""
-        required = ["entity_id", "model_path", "start_date", "end_date", "account_name", "session_cookie"]
+        required = ["entity_id", "model_path", "start_date", "account_name", "session_cookie"]
         for param in required:
             if not kwargs.get(param):
                 raise ValueError(f"Error: Missing required parameter: {param}")
@@ -252,7 +252,7 @@ class CarGurusScraper:
         entity_id: str,
         model_path: str,
         start_date_str: str,
-        end_date_str: str,
+        end_date_str: Optional[str],
         account_name: str,
         session_cookie: str,
     ) -> str:
@@ -264,13 +264,19 @@ class CarGurusScraper:
             entity_id=entity_id,
             model_path=model_path,
             start_date=start_date_str,
-            end_date=end_date_str,
             account_name=account_name,
             session_cookie=session_cookie,
         )
 
         start_date = self.validator.validate_date_format(start_date_str)
-        end_date = self.validator.validate_date_format(end_date_str)
+        
+        # Use yesterday as end date if not provided (CarGurus likely doesn't have today's data yet)
+        if end_date_str:
+            end_date = self.validator.validate_date_format(end_date_str)
+        else:
+            end_date = datetime.now() - timedelta(days=1)
+            print(f"📅 No end date provided, using yesterday: {end_date.strftime('%Y-%m-%d')}")
+        
         start_date = self.validator.validate_date_range(start_date, end_date)
         print("✅ Input validation complete")
 
@@ -309,7 +315,9 @@ class CarGurusScraper:
 
         # Generate CSV
         print("💾 Generating CSV file...")
-        filename = self.csv_exporter.generate_csv(filled_data, account_name, start_date_str, end_date_str)
+        # Use the actual end date for filename if end_date_str was not provided
+        actual_end_date_str = end_date_str if end_date_str else end_date.strftime('%Y-%m-%d')
+        filename = self.csv_exporter.generate_csv(filled_data, account_name, start_date_str, actual_end_date_str)
 
         return filename
 
@@ -321,7 +329,7 @@ def main():
     parser.add_argument("--entity-id", required=True, help="CarGurus entity ID (e.g., 'c32015')")
     parser.add_argument("--model-path", required=True, help="URL path segment (e.g., 'Honda-Civic-Hatchbook-d2441')")
     parser.add_argument("--start-date", required=True, help="Start date in YYYY-MM-DD format")
-    parser.add_argument("--end-date", required=True, help="End date in YYYY-MM-DD format")
+    parser.add_argument("--end-date", help="End date in YYYY-MM-DD format (defaults to yesterday if not provided)")
     parser.add_argument(
         "--account-name", required=True, help="Vehicle name for Monarch CSV (e.g., '2022 Honda Civic EX-L')"
     )
@@ -335,7 +343,7 @@ def main():
             entity_id=args.entity_id,
             model_path=args.model_path,
             start_date_str=args.start_date,
-            end_date_str=args.end_date,
+            end_date_str=args.end_date,  # Can be None now
             account_name=args.account_name,
             session_cookie=args.session_cookie,
         )

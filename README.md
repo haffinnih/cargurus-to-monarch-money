@@ -28,6 +28,7 @@ uv sync
 ### Basic Command
 
 ```bash
+# With specific end date
 uv run python cargurus_scraper.py \
   --entity-id "c32015" \
   --model-path "Honda-Civic-Hatchback-d2441" \
@@ -35,18 +36,26 @@ uv run python cargurus_scraper.py \
   --end-date "2024-06-30" \
   --account-name "2022 Honda Civic EX-L" \
   --session-cookie "ABC123XYZ456"
+
+# Using yesterday as end date (end-date omitted)
+uv run python cargurus_scraper.py \
+  --entity-id "c32015" \
+  --model-path "Honda-Civic-Hatchback-d2441" \
+  --start-date "2024-01-01" \
+  --account-name "2022 Honda Civic EX-L" \
+  --session-cookie "ABC123XYZ456"
 ```
 
 ### Parameters
 
-| Parameter          | Description                     | Example                       |
-| ------------------ | ------------------------------- | ----------------------------- |
-| `--entity-id`      | CarGurus vehicle entity ID      | `c32015`                      |
-| `--model-path`     | URL path segment from CarGurus  | `Honda-Civic-Hatchback-d2441` |
-| `--start-date`     | Start date in YYYY-MM-DD format | `2024-01-01`                  |
-| `--end-date`       | End date in YYYY-MM-DD format   | `2024-12-31`                  |
-| `--account-name`   | Vehicle name for CSV output     | `2022 Honda Civic EX-L`       |
-| `--session-cookie` | JSESSIONID cookie from CarGurus | `ABC123XYZ456`                |
+| Parameter          | Description                                        | Example                       |
+| ------------------ | -------------------------------------------------- | ----------------------------- |
+| `--entity-id`      | CarGurus vehicle entity ID                         | `c32015`                      |
+| `--model-path`     | URL path segment from CarGurus                     | `Honda-Civic-Hatchback-d2441` |
+| `--start-date`     | Start date in YYYY-MM-DD format                   | `2024-01-01`                  |
+| `--end-date`       | End date in YYYY-MM-DD format (optional, defaults to yesterday) | `2024-12-31`                  |
+| `--account-name`   | Vehicle name for CSV output                        | `2022 Honda Civic EX-L`       |
+| `--session-cookie` | JSESSIONID cookie from CarGurus                    | `ABC123XYZ456`                |
 
 ### Getting Required Parameters
 
@@ -83,6 +92,8 @@ Date,Balance,Account
 Example: `output/2022_Honda_Civic_EX-L_2024-01-01_2024-06-30.csv`
 
 The `output/` directory is automatically created if it doesn't exist and is ignored by git to prevent committing your personal vehicle data.
+
+**Note:** When no end date is specified, the script uses yesterday's date as the default since CarGurus typically doesn't have same-day price data available.
 
 ## Import to Monarch Money
 
