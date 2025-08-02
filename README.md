@@ -2,6 +2,18 @@
 
 A Python script that extracts daily vehicle price data from CarGurus API and formats it for import into Monarch Money's vehicle tracking system.
 
+I've been wanting to create this for months(? probably over a year at this point). It was a relatively simple mini-project, but I just hadn't made the time to complete it.
+
+I took a stab at it tonight with [Claude](https://claude.ai).
+
+- Initial planning with Claude on web + poking around on Car Gurus site to discover API (~25 mins)
+- Initial commit to functional MVP with [Claude Code](https://www.anthropic.com/claude-code) (~10 mins)
+- Further refinement with user-friendly adaptions and improvements (~30 mins)
+- Updating README manually and figuring out how to capture a Claude conversation because I don't trust link sharing to not decay at some point in the future (~30 mins)
+  - I had to install Chrome to use [Claude Share](https://chromewebstore.google.com/detail/claude-share/khnkcffkddpblpjfefjalndfpgbbjfpc) to get a mostly working markdown export. It needed some love, but we got there!
+
+Enjoy! 🫡
+
 ## Features
 
 - Extracts historical vehicle price data from CarGurus
@@ -11,19 +23,9 @@ A Python script that extracts daily vehicle price data from CarGurus API and for
 - Comprehensive input validation and error handling
 - Rate limiting to respect API constraints
 
-## Installation
+## Usage
 
 This project uses [uv](https://docs.astral.sh/uv/) for dependency management. Make sure you have uv installed.
-
-```bash
-# Clone or download the project
-cd car-gurus-value
-
-# Install dependencies
-uv sync
-```
-
-## Usage
 
 ### Basic Command
 
@@ -174,9 +176,6 @@ To modify or extend the scraper:
 ```bash
 # Install development dependencies
 uv sync
-
-# Run syntax check
-uv run python -m py_compile cargurus_scraper.py
 
 # View help
 uv run python cargurus_scraper.py --help
