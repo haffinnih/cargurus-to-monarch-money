@@ -32,11 +32,12 @@ class InputValidator:
     @staticmethod
     def validate_date_range(start_date: datetime, end_date: datetime) -> datetime:
         """Validate date range constraints and offer earliest possible date if needed."""
-        now = datetime.now()
-        one_year_ago = now - timedelta(days=365)
+        today = datetime.now().date()
+        earliest_allowed_date = today - timedelta(days=365)
 
-        if start_date < one_year_ago:
-            earliest_date = one_year_ago.strftime('%Y-%m-%d')
+        # Compare dates only, not time components
+        if start_date.date() < earliest_allowed_date:
+            earliest_date = earliest_allowed_date.strftime('%Y-%m-%d')
             provided_date = start_date.strftime('%Y-%m-%d')
             
             print(f"⚠️  Start date {provided_date} is more than 1 year ago.")
@@ -45,7 +46,7 @@ class InputValidator:
             response = input("Would you like to use the earliest possible date instead? (y/n): ").lower().strip()
             if response in ['y', 'yes']:
                 print(f"✅ Using {earliest_date} as start date")
-                return one_year_ago
+                return datetime.combine(earliest_allowed_date, datetime.min.time())
             else:
                 raise ValueError("Error: Start date cannot be more than 1 year ago")
 
@@ -57,7 +58,7 @@ class InputValidator:
     @staticmethod
     def validate_required_params(**kwargs) -> None:
         """Validate all required parameters are provided."""
-        required = ["entity_id", "model_path", "start_date", "account_name", "session_cookie"]
+        required = ["entity_id", "model_path", "account_name", "session_cookie"]
         for param in required:
             if not kwargs.get(param):
                 raise ValueError(f"Error: Missing required parameter: {param}")
@@ -251,7 +252,7 @@ class CarGurusScraper:
         self,
         entity_id: str,
         model_path: str,
-        start_date_str: str,
+        start_date_str: Optional[str],
         end_date_str: Optional[str],
         account_name: str,
         session_cookie: str,
@@ -263,12 +264,19 @@ class CarGurusScraper:
         self.validator.validate_required_params(
             entity_id=entity_id,
             model_path=model_path,
-            start_date=start_date_str,
             account_name=account_name,
             session_cookie=session_cookie,
         )
 
-        start_date = self.validator.validate_date_format(start_date_str)
+        # Use earliest possible date (exactly 1 year ago) as start date if not provided
+        if start_date_str:
+            start_date = self.validator.validate_date_format(start_date_str)
+        else:
+            # Use date-only calculation to match validation logic
+            today = datetime.now().date()
+            earliest_date = today - timedelta(days=365)
+            start_date = datetime.combine(earliest_date, datetime.min.time())
+            print(f"📅 No start date provided, using earliest possible date: {start_date.strftime('%Y-%m-%d')}")
         
         # Use yesterday as end date if not provided (CarGurus likely doesn't have today's data yet)
         if end_date_str:
@@ -315,9 +323,10 @@ class CarGurusScraper:
 
         # Generate CSV
         print("💾 Generating CSV file...")
-        # Use the actual end date for filename if end_date_str was not provided
+        # Use the actual dates for filename if they were not provided
+        actual_start_date_str = start_date_str if start_date_str else start_date.strftime('%Y-%m-%d')
         actual_end_date_str = end_date_str if end_date_str else end_date.strftime('%Y-%m-%d')
-        filename = self.csv_exporter.generate_csv(filled_data, account_name, start_date_str, actual_end_date_str)
+        filename = self.csv_exporter.generate_csv(filled_data, account_name, actual_start_date_str, actual_end_date_str)
 
         return filename
 
@@ -328,7 +337,7 @@ def main():
 
     parser.add_argument("--entity-id", required=True, help="CarGurus entity ID (e.g., 'c32015')")
     parser.add_argument("--model-path", required=True, help="URL path segment (e.g., 'Honda-Civic-Hatchbook-d2441')")
-    parser.add_argument("--start-date", required=True, help="Start date in YYYY-MM-DD format")
+    parser.add_argument("--start-date", help="Start date in YYYY-MM-DD format (defaults to earliest possible date if not provided)")
     parser.add_argument("--end-date", help="End date in YYYY-MM-DD format (defaults to yesterday if not provided)")
     parser.add_argument(
         "--account-name", required=True, help="Vehicle name for Monarch CSV (e.g., '2022 Honda Civic EX-L')"
