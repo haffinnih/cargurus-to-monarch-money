@@ -59,8 +59,8 @@ uv run python cargurus_scraper.py \
 | ------------------ | ------------------------------------------------------------------ | ----------------------------- |
 | `--entity-id`      | CarGurus vehicle entity ID                                         | `c32015`                      |
 | `--model-path`     | URL path segment from CarGurus                                     | `Honda-Civic-Hatchback-d2441` |
-| `--start-date`     | Start date in YYYY-MM-DD format (optional, defaults to 1 year ago) | `2024-01-01`                  |
-| `--end-date`       | End date in YYYY-MM-DD format (optional, defaults to yesterday)    | `2024-12-31`                  |
+| `--start-date`     | Start date in YYYY-MM-DD format (optional, defaults to 1 year ago) | `2025-01-01`                  |
+| `--end-date`       | End date in YYYY-MM-DD format (optional, defaults to yesterday)    | `2025-12-31`                  |
 | `--account-name`   | Vehicle name for CSV output                                        | `2022 Honda Civic EX-L`       |
 | `--session-cookie` | JSESSIONID cookie from CarGurus                                    | `ABC123XYZ456`                |
 
@@ -68,20 +68,18 @@ uv run python cargurus_scraper.py \
 
 #### 1. Finding Entity ID and Model Path
 
-1. Go to CarGurus and search for your vehicle
-2. Navigate to the price trends page for your specific model
-3. The URL will look like: `https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchback-d2441`
-4. The model path is: `Honda-Civic-Hatchback-d2441`
-5. Open browser developer tools and inspect the network requests
-6. Look for API calls to find the entity ID (e.g., `c32015`)
+1. Go to [CarGurus Price Trends](https://www.cargurus.com/research/price-trends)
+2. Drill down to get to your desired make/model/year
+3. Uncheck all of the charts except the one you want to fetch
+4. The URL will look like: `https://www.cargurus.com/research/price-trends/Honda-Civic-Hatchback-d2441?entityIds=c32015&startDate=1740805200000&endDate=1754107199999`
+5. Note the model path `Honda-Civic-Hatchback-d2441` and entity id `c32015`
 
 #### 2. Getting Session Cookie
 
-1. Open CarGurus in your browser and log in if required
-2. Open browser developer tools (F12)
-3. Go to Application/Storage tab → Cookies → cargurus.com
-4. Find the `JSESSIONID` cookie value
-5. Copy the value (without "JSESSIONID=")
+1. Open browser developer tools (F12)
+2. Go to Application/Storage tab → Cookies → cargurus.com
+3. Find the `JSESSIONID` cookie value
+4. Copy the value (without "JSESSIONID=")
 
 ## Output
 
@@ -89,9 +87,9 @@ The script generates CSV files in an `output/` directory with the following form
 
 ```csv
 Date,Balance,Account
-2024-01-01,24988.09,2022 Honda Civic EX-L
-2024-01-02,24988.09,2022 Honda Civic EX-L
-2024-01-03,24979.12,2022 Honda Civic EX-L
+2024-01-01,24988.09,2022 <account-name>
+2024-01-02,24988.09,2022 <account-name>
+2024-01-03,24979.12,2022 <account-name>
 ```
 
 **File location:** `output/{account_name_sanitized}_{start_date}_{end_date}.csv`
@@ -110,19 +108,18 @@ This means running the script with no date parameters will give you a full year 
 ## Import to Monarch Money
 
 1. Log into Monarch Money
-2. Go to Settings → Data Import
-3. Upload the generated CSV file from the `output/` directory
-4. Map the columns:
-   - Date → Date
-   - Balance → Balance/Value
-   - Account → Account Name
+2. Go the account you want to edit
+3. Download the balance history ([help](https://help.monarchmoney.com/hc/en-us/articles/15526600975764-Downloading-Transaction-or-Account-History))
+4. Edit it with the data you got from the csv output
+5. Upload the CSV back to your account ([help](https://help.monarchmoney.com/hc/en-us/articles/14882425704212-Upload-Account-Balance-History))
 
 ## Error Handling
 
 The script provides clear error messages for common issues:
 
 - **Invalid date format:** "Error: Date must be in YYYY-MM-DD format"
-- **Date range issues:** "Error: Start date cannot be more than 1 year ago"
+- **Start date too old:** "Error: Start date cannot be more than 1 year ago"
+- **End date in future:** "Error: End date cannot be in the future"
 - **Missing parameters:** "Error: Missing required parameter: entity_id"
 - **Invalid session:** "Error: Invalid session cookie. Please provide a valid JSESSIONID"
 - **No data found:** "Error: No price data available for the specified vehicle and date range"
@@ -136,27 +133,15 @@ The script provides clear error messages for common issues:
 
 ## Examples
 
-### Tesla Model 3
+### Toyota Corolla
 
 ```bash
 uv run python cargurus_scraper.py \
-  --entity-id "c26989" \
-  --model-path "Tesla-Model-3-d2115" \
-  --start-date "2024-01-01" \
-  --end-date "2024-03-31" \
-  --account-name "2023 Tesla Model 3" \
-  --session-cookie "your_session_cookie_here"
-```
-
-### Toyota Camry
-
-```bash
-uv run python cargurus_scraper.py \
-  --entity-id "c25847" \
-  --model-path "Toyota-Camry-d15" \
-  --start-date "2024-06-01" \
-  --end-date "2024-08-31" \
-  --account-name "2022 Toyota Camry LE" \
+  --entity-id "c26003" \
+  --model-path "Toyota-Corolla-d295" \
+  --start-date "2025-06-01" \
+  --end-date "2025-08-31" \
+  --account-name "2017 Toyota Corolla" \
   --session-cookie "your_session_cookie_here"
 ```
 
@@ -165,7 +150,7 @@ uv run python cargurus_scraper.py \
 ### "Invalid session cookie" error
 
 - Your JSESSIONID cookie has expired
-- Get a fresh cookie by logging into CarGurus again
+- Get a fresh cookie by navigating around CarGurus again
 
 ### "Rate limited" error
 
