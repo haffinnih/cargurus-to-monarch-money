@@ -28,6 +28,8 @@ class TestCarGurusAPIClient:
 
         # Check that session headers are set correctly
         cookie_header = self.client.session.headers.get("Cookie")
+        assert cookie_header is not None
+        assert isinstance(cookie_header, str)
         assert f"JSESSIONID={self.session_cookie}" in cookie_header
         assert "User-Agent" in self.client.session.headers
 
@@ -153,6 +155,10 @@ class TestCarGurusAPIClient:
         client1 = CarGurusAPIClient(cookie1)
         client2 = CarGurusAPIClient(cookie2)
 
-        assert f"JSESSIONID={cookie1}" in client1.session.headers["Cookie"]
-        assert f"JSESSIONID={cookie2}" in client2.session.headers["Cookie"]
-        assert client1.session.headers["Cookie"] != client2.session.headers["Cookie"]
+        cookie1_header = client1.session.headers["Cookie"]
+        cookie2_header = client2.session.headers["Cookie"]
+        assert isinstance(cookie1_header, str)
+        assert isinstance(cookie2_header, str)
+        assert f"JSESSIONID={cookie1}" in cookie1_header
+        assert f"JSESSIONID={cookie2}" in cookie2_header
+        assert cookie1_header != cookie2_header
