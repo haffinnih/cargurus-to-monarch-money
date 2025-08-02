@@ -24,3 +24,8 @@ line-length = 120
 dev = [
     "ruff>=0.12.7",
 ]
+test = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.0.0",
+    "freezegun>=1.4.0",
+]
